@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { RoutePath } from "../entities/RoutePath";
 
 interface SidebarItem {
   label: string;
@@ -10,7 +11,7 @@ interface SidebarItem {
 }
 
 interface SidebarProps {
-  items: SidebarItem[];
+  items: RoutePath[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ items = [] }) => {

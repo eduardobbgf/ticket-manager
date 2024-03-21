@@ -1,13 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
+import ZendeskService from "../services/create-ticket";
+import ConfirmationModal from "../components/confirmation-modal";
+import zendeskService from "../services/create-ticket";
+const baseUrl = "https://gen1331.zendesk.com/api/v2";
+const subdomain = "gen1331";
+const user = "eduardo.bbgf@gmail.com/token";
+const pwd = "7fV9mKqqc0369Yll4OUKNISD9lPDWlA0DLaOxG5y";
 
-export default function CreaPateTicket() {
+export default function CreateTicket() {
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    detailing: "",
+    name: "Teste",
+    email: "yop@yopmail.com",
+    subject: "Teste",
+    description: "TEste",
   });
 
   const handleChange = (
@@ -20,17 +28,22 @@ export default function CreaPateTicket() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    zendeskService(subdomain, user, pwd)
+      .createTicket(formData)
+      .then((ticket) => {
+        console.log("Ticket created:", ticket);
+        setShowModal(true);
+      })
+      .catch((error) => {
+        console.error("Failed to create ticket:", error.message);
+      });
   };
 
   return (
-    <div className="flex items-center justify-center h-full">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 py-8 pt-8"
-      >
+    <div className="bg-white px-8 py-8 pt-8 h-full w-full">
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -84,15 +97,15 @@ export default function CreaPateTicket() {
         </div>
         <div className="mb-6">
           <label
-            htmlFor="detailing"
+            htmlFor="description"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
             Detailing:
           </label>
           <textarea
-            id="detailing"
-            name="detailing"
-            value={formData.detailing}
+            id="description"
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -107,6 +120,7 @@ export default function CreaPateTicket() {
           </button>
         </div>
       </form>
+      {showModal ? <ConfirmationModal message={formData.description} /> : <></>}
     </div>
   );
 }
