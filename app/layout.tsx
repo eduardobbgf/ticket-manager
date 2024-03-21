@@ -18,6 +18,10 @@ interface SidebarItem {
 
 const sidebar: SidebarItem[] = [
   {
+    label: "Home",
+    route: "/",
+  },
+  {
     label: "Create Ticket",
     route: "/create-ticket",
   },
