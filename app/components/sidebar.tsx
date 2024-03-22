@@ -5,11 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { RoutePath } from "../entities/RoutePath";
 
-interface SidebarItem {
-  label: string;
-  route: string;
-}
-
 interface SidebarProps {
   items: RoutePath[];
 }
@@ -24,12 +19,13 @@ const Sidebar: React.FC<SidebarProps> = ({ items = [] }) => {
         {items.map((item, index) => (
           <li
             key={index}
-            className={`hover:bg-gray-100 py-2 px-4 cursor-pointer font-light text-sm rounded-md ${
+            className={`flex flex-row align-center hover:bg-gray-100 py-2 px-4 cursor-pointer rounded-md ${
               path === item?.route ? " text-primaryColor" : ""
             }`}
             onClick={() => router.push(item?.route)}
           >
-            {item?.label}
+            <item.icon className="pr-1" fontSize="medium"></item.icon>
+            <div className="font-light text-sm">{item?.label}</div>
           </li>
         ))}
       </ul>
