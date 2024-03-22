@@ -1,16 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import ZendeskService from "../services/create-ticket";
 import ConfirmationModal from "../components/confirmation-modal";
-import zendeskService from "../services/create-ticket";
-const baseUrl = "https://gen1331.zendesk.com/api/v2";
-const subdomain = "gen1331";
-const user = "eduardo.bbgf@gmail.com/token";
-const pwd = "7fV9mKqqc0369Yll4OUKNISD9lPDWlA0DLaOxG5y";
+import { createTicket } from "../services/create-ticket";
 
 export default function CreateTicket() {
   const [showModal, setShowModal] = useState(false);
+  const [ticketId, setTicketId] = useState("");
   const [formData, setFormData] = useState({
     name: "Teste",
     email: "yop@yopmail.com",
@@ -30,10 +26,10 @@ export default function CreateTicket() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    zendeskService(subdomain, user, pwd)
-      .createTicket(formData)
+    createTicket(formData)
       .then((ticket) => {
         console.log("Ticket created:", ticket);
+        setTicketId(ticket.id);
         setShowModal(true);
       })
       .catch((error) => {
@@ -120,7 +116,7 @@ export default function CreateTicket() {
           </button>
         </div>
       </form>
-      {showModal ? <ConfirmationModal message={formData.description} /> : <></>}
+      {showModal ? <ConfirmationModal message={ticketId} /> : <></>}
     </div>
   );
 }

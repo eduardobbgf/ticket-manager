@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "./components/nav";
 import Sidebar from "./components/sidebar";
+import { RoutePath } from "./entities/RoutePath";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,12 +12,7 @@ export const metadata: Metadata = {
   description: "Zendesk ticket server to automate processes",
 };
 
-interface SidebarItem {
-  label: string;
-  route: string;
-}
-
-const sidebar: SidebarItem[] = [
+const sidebar: RoutePath[] = [
   {
     label: "Home",
     route: "/",
@@ -24,6 +20,10 @@ const sidebar: SidebarItem[] = [
   {
     label: "Create Ticket",
     route: "/create-ticket",
+  },
+  {
+    label: "Generate Token",
+    route: "/generate-token",
   },
 ];
 
