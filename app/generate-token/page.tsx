@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { environment } from "../enviroment/dev";
 import { useParams } from "next/navigation";
+import Button from "../components/button";
 
 const ZendeskTokenGenerator = () => {
   const router = useParams();
@@ -36,13 +37,8 @@ const ZendeskTokenGenerator = () => {
   }, []);
 
   return (
-    <div className="bg-white w-full text-primaryColor p-16">
-      <button
-        className="border border-primaryColor p-4 rounded shadow-md hover:bg-primaryColor hover:text-white"
-        onClick={handleAuthorize}
-      >
-        Generate Access Token
-      </button>
+    <div className="bg-white w-full p-16">
+      <Button buttonTitle="Generate Access Token" onClick={handleAuthorize()} />
     </div>
   );
 };
