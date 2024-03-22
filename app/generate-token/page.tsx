@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { environment } from "../enviroment/dev";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const ZendeskTokenGenerator = () => {
-  const [accessToken, setAccessToken] = useState("");
   const router = useParams();
 
   const handleAuthorize = () => {
@@ -37,9 +36,13 @@ const ZendeskTokenGenerator = () => {
   }, []);
 
   return (
-    <div>
-      <button onClick={handleAuthorize}>Generate Access Token</button>
-      {accessToken && <p>Access Token: {accessToken}</p>}
+    <div className="bg-white w-full text-primaryColor p-16">
+      <button
+        className="border border-primaryColor p-4 rounded shadow-md hover:bg-primaryColor hover:text-white"
+        onClick={handleAuthorize}
+      >
+        Generate Access Token
+      </button>
     </div>
   );
 };
