@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ConfirmationModal from "../components/confirmation-modal";
 import { createTicket } from "../services/create-ticket";
 import Button from "../components/button";
+import { Ticket } from "@/app/entities/Ticket";
 
 const subjects = [
   {
@@ -23,6 +24,10 @@ const subjects = [
   },
 ];
 
+type Details = {
+  [key: string]: string;
+};
+
 export default function CreateTicket() {
   const [showModal, setShowModal] = useState(false);
   const [ticketId, setTicketId] = useState("");
@@ -30,7 +35,7 @@ export default function CreateTicket() {
     name: "",
     email: "",
     subject: "",
-    details: {},
+    details: {} as Details,
     description: "",
   });
 
@@ -52,7 +57,7 @@ export default function CreateTicket() {
     const initialDetailsState = selectedSubjectFields.reduce((acc, field) => {
       acc[field] = "";
       return acc;
-    }, {});
+    }, {} as Details);
     setFormData({
       ...formData,
       subject: selectedSubject,
@@ -76,9 +81,9 @@ export default function CreateTicket() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     createTicket(formData)
-      .then((ticket) => {
+      .then((ticket: Ticket) => {
         console.log("Ticket created:", ticket);
-        setTicketId(ticket.id);
+        setTicketId(ticket.id || "");
         setShowModal(true);
       })
       .catch((error) => {
@@ -87,7 +92,7 @@ export default function CreateTicket() {
   };
 
   return (
-    <div className="bg-white px-8 py-8 pt-8 h-full w-full">
+    <div className="bg-white px-8 py-8 pt-8 min-h-full w-full min-h-auto">
       <h2 className="text-2xl font-extralight mb-8">Create Ticket</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -164,7 +169,7 @@ export default function CreateTicket() {
                   type="text"
                   id={field}
                   name={field}
-                  value={formData.details[field] || ""}
+                  value={formData?.details[field] || ""}
                   onChange={handleDetailsChange}
                   required
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

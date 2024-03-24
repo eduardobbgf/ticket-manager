@@ -14,7 +14,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items = [] }) => {
   const router = useRouter();
 
   return (
-    <div className="bg-white h-full w-52 border-r border-gray-300 py-4 px-2">
+    <div className="bg-white min-h-128 w-52 border-r border-gray-300 py-4 px-2">
       <ul>
         {items.map((item, index) => (
           <li

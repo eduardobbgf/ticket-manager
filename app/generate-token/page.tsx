@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect } from "react";
 import { environment } from "../enviroment/dev";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import Button from "../components/button";
 
 const ZendeskTokenGenerator = () => {
-  const router = useParams();
+  const router = useRouter();
+  const path = usePathname();
 
   const handleAuthorize = () => {
     const authorizationUrl = `https://${
@@ -17,28 +18,28 @@ const ZendeskTokenGenerator = () => {
     )}
     `;
 
-    window.open(authorizationUrl, "_blank");
+    router.push(authorizationUrl);
   };
 
-  const parseAccessToken = () => {
-    const url = new URL(window.location.href);
+  const parseAccessToken = (e: Event) => {
+    e.preventDefault();
+    const url = new URL(`http://localhost:3000${path}`);
     console.log(url);
 
     const accessToken = url.hash.split("&")[0].split("=")[1];
     console.log(accessToken);
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-      window.location.href = "/";
+      router.push("/");
     }
   };
 
-  useEffect(() => {
-    parseAccessToken();
-  }, []);
-
   return (
-    <div className="bg-white w-full p-16">
-      <Button buttonTitle="Generate Access Token" onClick={handleAuthorize()} />
+    <div className="bg-white w-full p-16 min-h-full">
+      <Button
+        buttonTitle="Generate Access Token"
+        onClick={(e) => handleAuthorize(e)}
+      />
     </div>
   );
 };

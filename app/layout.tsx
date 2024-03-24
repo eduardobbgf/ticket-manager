@@ -42,7 +42,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Nav />
-        <div className="flex h-128">
+        <div className="flex min-h-128">
           <Sidebar items={sidebar} />
           {children}
         </div>
