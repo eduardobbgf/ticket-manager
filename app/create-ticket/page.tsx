@@ -1,5 +1,5 @@
 "use client";
-import React, { DetailedHTMLProps, useRef, useState } from "react";
+import React, { DetailedHTMLProps, RefObject, useRef, useState } from "react";
 import ConfirmationModal from "../components/confirmation-modal";
 import { createTicket } from "../services/create-ticket";
 import Button from "../components/button";
@@ -24,47 +24,21 @@ const subjects = [
   },
 ];
 
-type CustomFields = {
-  [key: string]: string | boolean;
-};
-
 export default function CreateTicket() {
-  const formRef = useRef();
+  const formRef = useRef() as RefObject<HTMLFormElement>;
   const [showModal, setShowModal] = useState(false);
   const [ticketId, setTicketId] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("Orders");
 
-  // const handleSwitch = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //   const newCustomFields =  {...formData.details}
-  //   setFormData({...formData, details: {...formData.details}})
-  // }
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log(formData);
-
-  //   createTicket(formData)
-  //     .then((ticket: Ticket) => {
-  //       console.log("Ticket created:", ticket);
-  //       setTicketId(ticket.id || "");
-  //       setShowModal(true);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Failed to create ticket:", error.message);
-  //     });
-  // };
-
   async function formAction(formData: { get: (arg0: string) => any }) {
     const selectedSubject = formData.get("subject");
 
-    let customFieldsHTML = ""; // Initialize empty HTML string for custom fields
+    let customFieldsHTML = "";
 
     if (selectedSubject === "Orders") {
       const orderNumber = formData.get("order_number");
       const affectAll = formData.get("affect_all") ? "Yes" : "No";
 
-      // Construct HTML for Orders custom fields
       customFieldsHTML = `Order Number: ${orderNumber}
         Affect All: ${affectAll}
       `;
@@ -73,7 +47,6 @@ export default function CreateTicket() {
       const transactionStatus = formData.get("transaction_status");
       const paymentAcquirer = formData.get("payment_acquirer");
 
-      // Construct HTML for Payments custom fields
       customFieldsHTML = `Transaction Number: ${transactionNumber}
         Transaction Status: ${transactionStatus}
         Payment Acquirer: ${paymentAcquirer}
@@ -109,9 +82,7 @@ export default function CreateTicket() {
     console.log(ticketForm);
   }
 
-  const handleChangeSubject = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChangeSubject = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     setSelectedSubject(e.target.value);
   };
@@ -121,7 +92,7 @@ export default function CreateTicket() {
       <h2 className="text-2xl font-extralight mb-8">Create Ticket</h2>
       <form
         action={formAction}
-        ref={formRef}
+        ref={formRef || undefined}
         className="flex flex-row flex-wrap"
       >
         <div className="mb-2 p-1 w-full sm:w-1/2">
