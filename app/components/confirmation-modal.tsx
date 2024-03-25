@@ -1,3 +1,4 @@
+import Button from "./button";
 import React, { useState } from "react";
 
 interface ConfirmationModalProps {
@@ -33,18 +34,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       <div className="bg-white p-6 rounded-lg shadow-lg z-10">
         <p className="text-lg mb-4">{message}</p>
         <div className="flex justify-end">
-          <button
-            onClick={handleCancel}
-            className="mr-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleConfirm}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Confirm
-          </button>
+          <Button onClick={handleConfirm}>Confirm</Button>
         </div>
       </div>
     </div>
