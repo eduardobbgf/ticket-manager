@@ -34,7 +34,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       <div className="bg-white p-6 rounded-lg shadow-lg z-10">
         <p className="text-lg mb-4">{message}</p>
         <div className="flex justify-end">
-          <Button onClick={handleConfirm}>Confirm</Button>
+          <Button onClick={handleConfirm} buttonTitle="Confirm"></Button>
         </div>
       </div>
     </div>
