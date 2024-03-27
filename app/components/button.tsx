@@ -25,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
 
   useEffect(() => {
     setCustomClassName(`${getClassNameByVariant(variant)} ${className}`);
-  }, [variant]);
+  }, []);
 
   return (
     <button type={type} className={customClassName} onClick={onClick}>

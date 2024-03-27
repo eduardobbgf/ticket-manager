@@ -2,7 +2,7 @@ import { environment } from "../enviroment/dev";
 
 export const createTicket = (ticketData: any) => {
   const accessToken = localStorage.getItem("accessToken");
-  return fetch(`${environment.base_url}/tickets.json`, {
+  return fetch(`${environment.base_url}/tickets`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

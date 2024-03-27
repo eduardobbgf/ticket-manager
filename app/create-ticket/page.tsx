@@ -4,6 +4,7 @@ import ConfirmationModal from "../components/confirmation-modal";
 import { createTicket } from "../services/create-ticket";
 import Button from "../components/button";
 import { Ticket } from "@/app/entities/Ticket";
+import { uploadImage } from "../services/upload-image";
 
 const subjects = [
   {
@@ -26,50 +27,71 @@ const subjects = [
 
 export default function CreateTicket() {
   const formRef = useRef() as RefObject<HTMLFormElement>;
+  const [selectedSubject, setSelectedSubject] = useState("Orders");
   const [showModal, setShowModal] = useState(false);
   const [ticketId, setTicketId] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("Orders");
 
-  async function formAction(formData: { get: (arg0: string) => any }) {
+  async function formAction(formData: FormData) {
     const selectedSubject = formData.get("subject");
-
-    let customFieldsHTML = "";
+    const ticketForm = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: selectedSubject,
+      description: "",
+      comment: { body: "", uploads: [] as Array<string> },
+      custom_fields: [{} as Object],
+    };
 
     if (selectedSubject === "Orders") {
       const orderNumber = formData.get("order_number");
-      const affectAll = formData.get("affect_all") ? "Yes" : "No";
+      const affectAll = formData.get("affect_all") ? true : false;
 
-      customFieldsHTML = `Order Number: ${orderNumber}
-        Affect All: ${affectAll}
-      `;
+      ticketForm.custom_fields = [
+        {
+          id: 24204825475355,
+          value: orderNumber,
+        },
+        {
+          id: 24204867136283,
+          value: affectAll,
+        },
+      ];
     } else if (selectedSubject === "Payments") {
       const transactionNumber = formData.get("transaction_number");
       const transactionStatus = formData.get("transaction_status");
       const paymentAcquirer = formData.get("payment_acquirer");
 
-      customFieldsHTML = `Transaction Number: ${transactionNumber}
-        Transaction Status: ${transactionStatus}
-        Payment Acquirer: ${paymentAcquirer}
-      `;
+      ticketForm.custom_fields = [
+        {
+          id: 24204888362267,
+          value: transactionNumber,
+        },
+        {
+          id: 24204944240155,
+          value: transactionStatus,
+        },
+        {
+          id: 24204947484315,
+          value: paymentAcquirer,
+        },
+      ];
     } else if (selectedSubject === "Catalog") {
       const skuId = formData.get("sku_id");
-      const printPage = formData.get("print_page");
+      ticketForm.custom_fields = [
+        {
+          id: 24204981722395,
+          value: skuId,
+        },
+      ];
 
-      customFieldsHTML = `SKU ID: ${skuId}
-        Print Page: ${printPage}
-      `;
+      const printPage = formData.get("print_page") as File;
+      const response = await uploadImage(printPage);
+      ticketForm.comment.uploads.push(response.upload.token);
     }
 
-    const description = `${customFieldsHTML}
-    Description: ${formData.get("description")}`;
+    ticketForm.comment.body = formData.get("description") as string;
 
-    const ticketForm = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      subject: selectedSubject,
-      description: description,
-    };
-
+    setShowModal(false);
     createTicket(ticketForm)
       .then((ticket: Ticket) => {
         console.log("Ticket created:", ticket);
@@ -79,7 +101,6 @@ export default function CreateTicket() {
       .catch((error) => {
         console.error("Failed to create ticket:", error.message);
       });
-    console.log(ticketForm);
   }
 
   const handleChangeSubject = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -263,8 +284,9 @@ export default function CreateTicket() {
               <input
                 id="print_page"
                 name="print_page"
+                type="file"
                 required
-                className="shadow rounded py-2 px-3"
+                className="shadow rounded relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-secondary-500 bg-transparent bg-clip-padding px-3 py-[0.43rem] text-base font-normal leading-tight text-surface transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:me-3 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-e file:border-solid file:border-inherit file:bg-transparent file:px-3  file:py-[0.32rem] file:text-surface focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none dark:border-white/70 dark:text-white  file:dark:text-white text-sm file:text-sm font-light file:font-light"
               />
             </div>
           </>
