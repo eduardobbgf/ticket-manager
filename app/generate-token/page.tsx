@@ -21,8 +21,7 @@ const ZendeskTokenGenerator = () => {
     router.push(authorizationUrl);
   };
 
-  const parseAccessToken = (e: Event) => {
-    e.preventDefault();
+  const parseAccessToken = () => {
     const url = new URL(`http://localhost:3000${path}`);
     console.log(url);
 
@@ -38,7 +37,7 @@ const ZendeskTokenGenerator = () => {
     <div className="bg-white w-full p-16 min-h-full">
       <Button
         buttonTitle="Generate Access Token"
-        onClick={(e) => handleAuthorize(e)}
+        onClick={parseAccessToken()}
       />
     </div>
   );
