@@ -90,6 +90,7 @@ export default function CreateTicket() {
     }
 
     ticketForm.comment.body = formData.get("description") as string;
+    ticketForm.description = formData.get("description") as string;
 
     setShowModal(false);
     createTicket(ticketForm)
@@ -247,7 +248,6 @@ export default function CreateTicket() {
                 Payment Acquirer:
               </label>
               <input
-                type="number"
                 id="payment_acquirer"
                 name="payment_acquirer"
                 required
